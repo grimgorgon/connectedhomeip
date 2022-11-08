@@ -29,3 +29,12 @@ jobs:
         run: |
           cd examples/lighting-app/linux
           timeout 120s ./out/debug/chip-lighting-app || cod
+  chip_tool:
+    needs: rebuild_lighting_app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Node
+        uses: actions/setup-node@aa759c6c94d3800c55b8601f21ba4b2371704cb7
+
+      - name: Install AVH API an
