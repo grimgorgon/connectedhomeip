@@ -1,0 +1,31 @@
+name: Matter_CICD_Demo
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  rebuild_lighting_app:
+    runs-on: self-hosted
+    steps:
+     - uses: actions/checkout@v2
+     
+     - name: submodules
+       run: ./scripts/checkout_submodules.py --shallow --platform linux
+       
+     - name: bootstrap and build
+       run: |
+         ./scripts/build/gn_bootstrap.sh
+         source scripts/activate.sh
+         cd examples/lighting-app/linux
+         gn gen out/debug
+         ninja -C out/debug
+
+run_lighting_app:
+    needs: rebuild_lighting_app
+    runs-on: self-hosted
+    steps:
+      - name: Run lighting-app for 120 seconds
+        run: |
+          cd examples/lighting-app/linux
+          timeout 120s ./out/debug/chip-lighting-app || cod
