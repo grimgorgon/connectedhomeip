@@ -21,7 +21,7 @@ jobs:
          gn gen out/debug
          ninja -C out/debug
 
-run_lighting_app:
+  run_lighting_app:
     needs: rebuild_lighting_app
     runs-on: self-hosted
     steps:
